@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: roboto;
+            src: url(https://fonts.googleapis.com/css2?family=Roboto&display=swap);
+        }
+        *{
+            margin: 0;
+            box-sizing: border-box;
+        }
+        h1{
+            font-size: 50px;
+            font-family: roboto;
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translate(-50%, -10%);
+
+        }
+        .main{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+        }
+        #data{
+            font-family: roboto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 50%;
+        }
+        #calc{
+            font-family: roboto;
+            font-size: 30px;
+            padding: 5px 20px;
+            cursor: pointer;
+            text-align: center;
+            margin: 0 auto;
+            color: #fff;
+            background-color: #ff73b3;
+            opacity: 1;
+            position: absolute;
+            top: 90%;
+            left: 50%;
+            transform: translate(-50%, -90%);
+            box-shadow: 0 0 10px 1px #ff73b3;
+            border: none;
+            border-radius: 2px;
+        }
+        #ok-btn, #next-btn{
+            font-family: roboto;
+            font-size: 15px;
+            padding: 5px 15px;
+            cursor: pointer;
+            text-align: center;
+            color: #fff;
+            background-color: #ff73b3;
+            opacity: 1;
+            box-shadow: 0 0 10px 1px #ff73b3;
+            border: none;
+            border-radius: 2px;
+            margin-top: 15px;
+        }
+        .prompt{
+            font-family: roboto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgb(221, 221, 221);
+            border-radius: 5px;
+            z-index: 1;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 40%;
+            width: 40%;
+            border-radius: 2%;
+        }
+        .prompt>p{
+            margin-bottom: 2px;
+        }
+        .prompt>p>span{
+            color: #ff73b3;
+        }
+        input{
+            outline: none;
+            border: 1px solid #ff73b3;
+            border-radius: 2px;
+            margin: 2px 0 8px 0;
+            height: 25px;
+        }
+        input:focus{
+    border-color:#ff73b3;
+    box-shadow:0 0 8px 0 #ff73b3;
+  }
+
+
+    </style>
+</head>
+<body>
+    <div class="heading">
+    <h1>DCA Calculator</h1>
+ </div>
+    <div class="prompt">
+        <p>You brought <span class="Coin"></span> sol</p>
+        <p>Total invested: <span class="total-invested"></span></p>
+        <p>Average buying price: <span class="avg-buy" ></span></p>
+    </div>
+    <div class="main">
+        <div id="data">
+            <label for="">Amount of coins/tokens</label>
+            <input type="text">
+            <label for="">Price per coin/token</label>
+            <input type="text">
+        </div>
+        <div class="button">
+            <button id="ok-btn">OK</button>
+            <button id="next-btn">Next</button>
+        </div>
+        <button id="calc">Calculate</button>
+    </div>
+</body>
+<script>
+    let blur = document.querySelector(".main")
+    let text = document.querySelectorAll("input");
+    let okButton = document.getElementById("ok-btn")
+    let nextButton = document.getElementById("next-btn")
+    let calcButton = document.getElementById("calc")
+    let prompt = document.querySelector('.prompt')
+
+    const breakEvenPriceEach = [];
+    const totalShare = [];
+
+    okButton.addEventListener('click', ()=>{
+        eachInvestAverage()
+        totalShares()
+    })
+
+    nextButton.addEventListener('click', ()=>{
+        text[0].value = ""
+        text[1].value = ""
+    })
+
+    calcButton.addEventListener('click', ()=>{
+        let a = document.createTextNode(totalCost()/AvgBuy())
+        document.querySelector('.avg-buy').appendChild(a);
+        let b = document.createTextNode(AvgBuy())
+        document.querySelector('.Coin').appendChild(b);
+        let c = document.createTextNode((totalCost()/AvgBuy())*AvgBuy())
+        document.querySelector('.total-invested').appendChild(c);
+
+        prompt.style.display = 'flex'
+        blur.style.filter = "blur(5px)";
+    })
+
+    function eachInvestAverage(){
+        let averageInvest = text[0].value*text[1].value
+        breakEvenPriceEach.push(averageInvest)
+    }
+
+    function totalShares(){
+        let sharePerInvest = text[0].value*1
+        totalShare.push(sharePerInvest);
+    }
+
+    function sum(breakEvenPriceEach){
+
+        let total = 0
+        for(let i=0; i<breakEvenPriceEach.length; i++){
+            total = total + breakEvenPriceEach[i]
+        }
+        return total;
+
+    }
+    function sum2(totalShare){
+
+        let total2 = 0
+        for(let i=0; i<totalShare.length; i++){
+            total2 = total2 + totalShare[i]
+        }
+        return total2;
+
+    }
+
+    function totalCost(){
+
+        let totalCost = sum(breakEvenPriceEach)
+        return totalCost;
+
+
+    }
+    function AvgBuy(){
+
+        let AvgBuy = sum2(totalShare)
+        return AvgBuy;
+
+    }
+    
+
+</script>
+</html>
